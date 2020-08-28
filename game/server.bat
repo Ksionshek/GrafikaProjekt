@@ -1,0 +1,1 @@
+C:\\Users\\Karol\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe -m http.server
