@@ -15,6 +15,95 @@
     <script src="threex/threex-artoolkitcontext.js"></script>
     <script src="threex/threex-arbasecontrols.js"></script>
     <script src="threex/threex-armarkercontrols.js"></script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      uniform float refractionRatio;
+      varying vec3 vRefract;
+      void main() 
+      { 
+        vec4 mPosition = modelMatrix * vec4( position, 1.0 );
+        vec3 nWorld = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
+        vRefract = normalize( refract( normalize( mPosition.xyz - cameraPosition ), nWorld, refractionRatio ) );
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      }
+      </script>
+      
+      <script id="fragmentShader" type="x-shader/x-vertex"> 
+      uniform sampler2D texture;
+      varying vec3 vRefract;
+      uniform float distance;
+      uniform float opacity;
+      uniform vec3 tint;
+      void main() 
+      {
+        vec2 p = vec2( vRefract.x * distance + 0.5, vRefract.y * distance + 0.5 );
+        p = vec2(1.0, 1.0) - p;
+        vec3 color = texture2D( texture, p ).rgb;
+        gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
+      }  
+      </script>
+
+      <script id="vertexShader2" type="x-shader/x-vertex">
+        uniform float time;
+        varying vec2 textureUV;
+        void main() 
+        { 
+            textureUV = uv;
+          vec3 newPosition = position + vec3( 0, 0, abs(sin(time)) );
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+        }
+        </script>
+        
+        <script id="fragmentShader2" type="x-shader/x-vertex"> 
+        uniform float time;
+        uniform sampler2D baseTexture;
+        varying vec2 textureUV;
+        void main() 
+        {
+          float amt = abs( sin(time) );
+          vec4 tintColor = texture2D( baseTexture, textureUV ) * vec4( amt, amt, 1, 1 );
+          gl_FragColor = tintColor;
+        }  
+        </script>
+
+        <script id="vertexShader3" type="x-shader/x-vertex">
+          uniform float time;
+          varying vec2 textureUV;
+          uniform sampler2D baseTexture;
+          void main() 
+          { 
+              textureUV = uv;
+            vec2 repeatUV = textureUV * vec2(4.0, 1.0);
+            float sideDisplacement = 0.0;
+            // side displacement only applied near edge of texture
+            if (repeatUV.y < 0.15)
+            {
+              float angle = atan(position.y, position.x);
+              float s1 = sin(8.3 * angle);
+              float s2 = sin(7.1 * angle);
+              sideDisplacement = 0.08 * s1 * s1 * abs(sin(0.65*time)) + 0.09 * s2 * s2 * abs(sin(0.74*time));
+            }
+            vec3 newPosition = position + normal * sideDisplacement;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+          }
+          </script>
+          
+          <script id="fragmentShader3" type="x-shader/x-vertex"> 
+          uniform float time;
+          uniform sampler2D baseTexture;
+          varying vec2 textureUV;
+          void main() 
+          {
+            vec2 repeatUV = textureUV * vec2(4.0, 1.0);
+            // displacement creates scrolling effect on texture
+            vec2 displaceUV = repeatUV + vec2(0.0, time/20.0);
+            float alpha = 1.0;
+            // transparency only applied near edge of texture
+            if (repeatUV.y < 0.315)
+              alpha = 1.0/0.315 * repeatUV.y;
+            vec4 tintColor = texture2D( baseTexture, displaceUV ) * vec4( 1.0, 1.0, 1.0, alpha );
+            gl_FragColor = tintColor;
+          }  
+          </script>
   </head>
   <body >
     <div id="screenApp">
@@ -49,27 +138,27 @@
                 </div>
               </li>
               <li>
-                <div onclick="changeModel(1)">
+                <div onclick="changeModel(6)">
                   Model 6
                 </div>
               </li>
               <li>
-                <div onclick="changeModel(2)">
+                <div onclick="changeModel(7)">
                   Model 7
                 </div>
               </li>
               <li>
-                <div onclick="changeModel(3)">
+                <div onclick="changeModel(8)">
                   Model 8
                 </div>
               </li>
               <li>
-                <div onclick="changeModel(4)">
+                <div onclick="changeModel(2)">
                   Model 9
                 </div>
               </li>
               <li>
-                <div onclick="changeModel(5)">
+                <div onclick="changeModel(3)">
                   Model 10
                 </div>
               </li>

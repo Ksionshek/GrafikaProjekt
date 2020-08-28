@@ -1,28 +1,61 @@
 var scene,camera, renderer, clock, deltaTime, totalTime;
 
-var arToolkitSource, arToolkitContext;
+var arToolkitSource, arToolkitContext, smoothedControls;
 
-var markerRoot, ammoMarker, hpMarker, respawnMarker, markerRoot2;
+var markerRoot, ammoMarker, hpMarker, respawnMarker, markerRoot5, markerRoot6,markerRoot7,markerRoot8;
 
 var markerControls1;
 var markerControls2;
 var markerControls3;
 var markerControls4;
 var markerControls5;
-
-var resourceGroup;
+var markerControls6;
+var markerControls7;
+var markerControls8;
 
 var markerGroup;
-var respawnGroup;
 
+var geometry5 = new THREE.PlaneBufferGeometry(2.5,2.5, 4,4);
+	
+	let loader5 = new THREE.TextureLoader();
+	let texture5 = loader5.load( 'img/color-grid.png', render );
+
+var material5 = new THREE.ShaderMaterial({
+  uniforms: {
+    time: { value: 1.0 },
+    baseTexture: { value: texture5 }
+  },
+  vertexShader: document.getElementById( 'vertexShader2' ).textContent,
+  fragmentShader: document.getElementById( 'fragmentShader2' ).textContent
+});
+
+var loader8 = new THREE.TextureLoader();
+var texture8 = loader8.load( 'img/water-2.jpg' );
+	// let texture = loader.load( 'images/color-grid.png' );	
+	texture8.wrapS = THREE.RepeatWrapping;
+	texture8.wrapT = THREE.RepeatWrapping;
+	texture8.repeat.set(8,2);
+		
+	// shader-based material
+var material8 = new THREE.ShaderMaterial({
+		uniforms: {
+			time: { value: 1.0 },
+			baseTexture: { value: texture8 },
+		},
+		vertexShader: document.getElementById( 'vertexShader3' ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader3' ).textContent,
+		transparent: true,
+	});
 
 var mesh1;
 var mesh2;
 var mesh3;
 var mesh4;
 var mesh5;
+var mesh6;
+var mesh7;
 
-var choice = 1;
+var choice = 6;
 initialize();
 animate();
 
@@ -130,13 +163,30 @@ function initialize() {
       
       markerRoot.add(markerGroup);
 
-
-    var geometry1 = new THREE.CylinderGeometry( 1, 1, 2, 3.2 );
-    var material1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+      let geometry1	= new THREE.CylinderGeometry(1,1, 4, 32,1);
+      let loader = new THREE.TextureLoader();
+      let texture = loader.load( 'img/tiles.jpg', render );
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(4,2);
+      let material1	= new THREE.MeshBasicMaterial({
+        transparent : true,
+        map: texture,
+        side: THREE.BackSide
+      }); 
       mesh1 = new THREE.Mesh( geometry1, material1 );
-      mesh1.position.y = 0.5;
-      markerRoot.add(mesh1);
-
+      mesh1.position.y = -2;
+      markerRoot.add( mesh1 );
+      
+      // the invisibility cloak (ring; has circular hole)
+      let geometry0 = new THREE.RingGeometry(1,9, 32);
+      let material0 = new THREE.MeshBasicMaterial({
+        // map: loader.load( 'images/color-grid.png' ), // for testing placement
+        colorWrite: false
+      });
+      let mesh0 = new THREE.Mesh( geometry0, material0 );
+      mesh0.rotation.x = -Math.PI/2;
+      markerRoot.add(mesh0);	
 
 
       break;
@@ -231,31 +281,152 @@ function initialize() {
 
     case 5:{
 
-      markerRoot2 = new THREE.Group();
-      scene.add(markerRoot2);
-      markerControls5 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
+      markerRoot5 = new THREE.Group();
+      scene.add(markerRoot5);
+      markerControls5 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot5, {
         type: "pattern",
         patternUrl: "/data/hiro.patt",
       });
      
-      markerRoot2.add(markerGroup);
+      markerRoot5.add(markerGroup);
 
+      
+	
+	
+	
+	mesh5 = new THREE.Mesh( geometry5, material5 );
+	mesh5.rotation.x = -Math.PI/2;
+	
+	markerRoot5.add( mesh5 );
 
-      let geometry5 = new THREE.CubeGeometry(1, 1, 1);
-      let material5 = new THREE.MeshNormalMaterial({
-        transparent: true,
-        opacity: 1.0,
-        side: THREE.DoubleSide,
-      });
-  
-        mesh5 = new THREE.Mesh(geometry5, material5);
-        mesh5.position.y = 0.5;
-  
-        markerRoot2.add(mesh5);
+        
 
       break;
     }
 
+    case 6:{
+
+      markerRoot6 = new THREE.Group();
+      scene.add(markerRoot6);
+
+      markerControls6 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot6, {
+        type: "pattern",
+        patternUrl: "/data/hiro.patt",
+      });
+      let geometry6 = new THREE.SphereGeometry(1, 32,32);
+	
+      let loader6 = new THREE.TextureLoader();
+      let texture6 = loader6.load( 'img/earth-sphere.jpg', render );
+      let material6 = new THREE.MeshLambertMaterial( { map: texture6, opacity: 1.0 } );
+      
+      mesh6 = new THREE.Mesh( geometry6, material6 );
+      mesh6.position.y = 1;
+      
+      markerRoot6.add( mesh6 );
+      
+      let pointLight6 = new THREE.PointLight( 0xffffff, 1, 100 );
+      pointLight6.position.set(0.5,3,2);
+      // create a mesh to help visualize the position of the light
+      pointLight6.add( 
+        new THREE.Mesh( 
+          new THREE.SphereBufferGeometry( 0.05, 16,8 ), 
+          new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.5 }) 
+        ) 
+      );
+      markerRoot6.add( pointLight6 );
+
+
+
+      break;
+    }
+    case 7:{
+
+      markerRoot7 = new THREE.Group();
+      scene.add(markerRoot7);
+
+      markerControls7 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot7, {
+        type: "pattern",
+        patternUrl: "/data/hiro.patt",
+      });
+      let loader = new THREE.TextureLoader();
+	
+	let videoTexture = new THREE.VideoTexture( arToolkitSource.domElement );
+	videoTexture.minFilter = THREE.LinearFilter;
+	
+	let refractMaterial = new THREE.ShaderMaterial({
+		uniforms: {
+			texture: { value: videoTexture },
+			refractionRatio: { value: 0.75 },
+			distance: { value: 1.0 },
+			opacity: { value: 1.0 },
+			tint: { value: new THREE.Vector3(0.8, 0.8, 1.0) }
+		},
+		vertexShader: document.getElementById( 'vertexShader' ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+		transparent: true
+	});
+	
+	reflectMesh = new THREE.Mesh( 
+		new THREE.TorusKnotGeometry(1, 0.4, 128, 16), // new THREE.SphereBufferGeometry(1, 32, 32), 
+		refractMaterial 
+	);
+	
+	reflectMesh.position.y = 1;
+		
+	markerRoot7.add( reflectMesh );
+      break;
+    }
+  case 8:{
+
+    markerRoot8 = new THREE.Group();
+      scene.add(markerRoot8);
+
+      markerControls8 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot8, {
+        type: "pattern",
+        patternUrl: "/data/hiro.patt",
+      });
+
+      
+		
+	// water
+	
+	let geometry8 = new THREE.TorusGeometry(1,1, 64, 256); // radius, tube radius
+	
+	
+	mesh8 = new THREE.Mesh( geometry8, material8 );
+	mesh8.rotation.x = -Math.PI/2;
+	mesh8.scale.z = 0.10;
+	
+	markerRoot8.add( mesh8 );
+	
+	// the inside of the hole
+	let geometry81	= new THREE.CylinderGeometry(1,1, 4, 32,1);
+	let texture81 = loader8.load( 'img/tiles.jpg', render );
+	texture81.wrapS = THREE.RepeatWrapping;
+	texture81.wrapT = THREE.RepeatWrapping;
+	texture81.repeat.set(4,2);
+	let material81	= new THREE.MeshBasicMaterial({
+		transparent : true,
+		map: texture81,
+		side: THREE.BackSide
+	}); 
+	mesh81 = new THREE.Mesh( geometry81, material81 );
+	mesh81.position.y = -2;
+	markerRoot8.add( mesh81 );
+	
+	// the invisibility cloak (ring; has circular hole)
+	let geometry83 = new THREE.RingGeometry(1,9, 32);
+	let material83 = new THREE.MeshBasicMaterial({
+		// map: loader.load( 'images/color-grid.png' ), // for testing placement
+		colorWrite: false
+	});
+	let mesh83 = new THREE.Mesh( geometry83, material83 );
+	mesh83.rotation.x = -Math.PI/2;
+	markerRoot8.add(mesh83);	
+	
+
+      break;
+  }
 
 
   }
@@ -264,16 +435,19 @@ function initialize() {
 
 function update() {
   // update artoolkit on every frame
-    
+ 
+  
 
   if (arToolkitSource.ready !== false)
     arToolkitContext.update(arToolkitSource.domElement);
-    
+  
+    material5.uniforms.time.value += deltaTime;
+    material8.uniforms.time.value += deltaTime;
  
 }
 
 function render() {
-  
+  mesh6.rotation.y += 0.1;
   renderer.render(scene, camera);
 }
 
