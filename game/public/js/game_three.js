@@ -1,24 +1,32 @@
+'use strict';
 var scene, camera, renderer, clock, deltaTime, totalTime;
+var clickscount = 0;
 
-var arToolkitSource, arToolkitContext, smoothedControls;
+var arToolkitSource, arToolkitContext;
+var refractMaterial,reflectMesh;
 
-var markerRoot,
-  ammoMarker,
-  hpMarker,
-  respawnMarker,
-  markerRoot5,
-  markerRoot6,
-  markerRoot7,
-  markerRoot8;
+var markerRoot1 = new THREE.Group();
+var markerRoot2 = new THREE.Group();
+var markerRoot3 = new THREE.Group();
+var markerRoot4 = new THREE.Group();
+var markerRoot5 = new THREE.Group();
+var markerRoot6 = new THREE.Group();
+var markerRoot7 = new THREE.Group();
+var markerRoot8 = new THREE.Group();
+var markerRoot9 = new THREE.Group();
+var markerRoot10 = new THREE.Group();
 
 var markerControls1;
-var markerControls2;
-var markerControls3;
-var markerControls4;
-var markerControls5;
-var markerControls6;
-var markerControls7;
+var markerControls2; 
+var markerControls3; 
+var markerControls4; 
+var markerControls5; 
+var markerControls6; 
+var markerControls7;  
 var markerControls8;
+var markerControls9;
+var markerControls10; 
+
 
 var markerGroup;
 
@@ -54,28 +62,106 @@ var material8 = new THREE.ShaderMaterial({
   transparent: true,
 });
 
+var mesh0;
 var mesh1;
 var mesh2;
 var mesh3;
 var mesh4;
 var mesh5;
 var mesh6;
+var pointLight6;
 var mesh7;
+var mesh8,mesh81,mesh83;
+var mesh9;
+var mesh10;
 
-var choice = 6;
+
+var choice = 5;
+
 initialize();
 animate();
 
 function changeModel(x) {
+  if(clickscount==12){
+    location.reload();
+  }
   console.log("choice poprzedni: ");
   console.log(choice);
+  let markerRoot = "markerRoot" +choice;
+  console.log("markerRoot");
+  console.log(markerRoot);
+  if(markerRoot == "markerRoot1" ){
+    markerRoot1.remove(mesh1);
+    markerRoot1.add(mesh0);
+    renderer.dispose( mesh1 );
+    renderer.dispose( mesh0 );
+    scene.remove(markerRoot1);
+  }
+  if(markerRoot == "markerRoot2" ){
+    markerRoot2.remove(mesh2);
+    renderer.dispose( mesh2 );
+    scene.remove(markerRoot2);
+  }
+  if(markerRoot == "markerRoot3" ){
+    markerRoot3.remove(mesh3);
+    renderer.dispose( mesh3 );
+    scene.remove(markerRoot3);
+  }
+  if(markerRoot == "markerRoot4" ){
+    markerRoot4.remove(mesh4);
+    renderer.dispose( mesh4 );
+    scene.remove(markerRoot4);
+  }
+  if(markerRoot == "markerRoot5" ){
+    markerRoot5.remove(mesh5);
+    renderer.dispose( mesh5 );
+    scene.remove(markerRoot5);
+  }
+  if(markerRoot == "markerRoot6" ){
+    markerRoot6.remove(mesh6);
+    markerRoot6.remove(pointLight6);
+    renderer.dispose( mesh6 );
+    renderer.dispose( pointLight6 );
+    scene.remove(markerRoot6);
+  }
+  if(markerRoot == "markerRoot7" ){
+    markerRoot7.remove(mesh7);
+    markerRoot7.remove(reflectMesh);
+    renderer.dispose( mesh7 );
+    renderer.dispose( reflectMesh);
+    scene.remove(markerRoot7);
+  }
+  if(markerRoot == "markerRoot8" ){
+    markerRoot8.remove(mesh8);
+    markerRoot8.remove(mesh81);
+    markerRoot8.remove(mesh83);
+    renderer.dispose( mesh8 );
+    renderer.dispose( mesh81 );
+    renderer.dispose( mesh83 );
+    scene.remove(markerRoot8);
+  }
+  if(markerRoot == "markerRoot9" ){
+    markerRoot9.remove(mesh9);
+    renderer.dispose( mesh9 );
+    scene.remove(markerRoot9);
+  }
+  if(markerRoot == "markerRoot10" ){
+    markerRoot10.remove(mesh10);
+    renderer.dispose( mesh10 );
+    scene.remove(markerRoot10);
+  }
+  
   choice = x;
   console.log("Zmiana choica");
   console.log(choice);
+  clickscount++;
   initialize();
 }
 
 function initialize() {
+
+ 
+
   scene = new THREE.Scene();
   camera = new THREE.Camera();
   camera.fov = window.innerHeight / window.screen.height;
@@ -91,18 +177,122 @@ function initialize() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   // renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
-  renderer.domElement.style.position = "absolute";
+  /*renderer.domElement.style.position = "absolute";
   renderer.domElement.style.top = "0px";
-  renderer.domElement.style.left = "500px";
+  renderer.domElement.style.left = "0px";*/
   document.body.appendChild(renderer.domElement);
 
   clock = new THREE.Clock();
   deltaTime = 0;
   totalTime = 0;
 
+
   arToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
   });
+  
+   // create atToolkitContext
+   arToolkitContext = new THREEx.ArToolkitContext({
+    cameraParametersUrl: "/data/camera_para.dat",
+    detectionMode: "mono_and_matrix",
+    matrixCodeType: "3x3",
+    
+  });
+    
+  
+   markerControls1 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot1,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls2 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot2,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls3 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot3,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls4 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot4,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+ markerControls5 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot5,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+  
+   markerControls6 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot6,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+  markerControls7 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot7,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls8 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot8,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls9 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot9,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+   markerControls10 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    markerRoot10,
+    {
+      type: 'barcode',
+      barcodeValue: 5,
+    }
+  );
+  
+
+ 
 
   //naprawia bĹÄd z renderowaniem strony, gdy zmienimy rozmiar okienka
   function onResize() {
@@ -110,10 +300,7 @@ function initialize() {
     arToolkitSource.copySizeTo(renderer.domElement);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
-    //b = renderer.getSize();
-    //pobieranie szerokosc i wysokosci dynamicznie zmieniajacego sie canvasa
-    resolutionX = window.innerWidth;
-    resolutionY = window.innerHeight;
+  
 
     if (arToolkitContext.arController !== null) {
       arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
@@ -129,34 +316,20 @@ function initialize() {
     onResize();
   });
 
-  // create atToolkitContext
-  arToolkitContext = new THREEx.ArToolkitContext({
-    cameraParametersUrl: "/data/camera_para.dat",
-    detectionMode: "mono_and_matrix",
-    matrixCodeType: "3x3",
-    maxDetectionRate: 30,
-  });
+ 
 
   // copy projection matrix to camera when initialization complete
   arToolkitContext.init(function onCompleted() {
     camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
   });
 
-  markerGroup = new THREE.Group();
+
   console.log("Switch: ");
   console.log(choice);
   switch (choice) {
     case 1: {
-      markerRoot = new THREE.Group();
-      scene.add(markerRoot);
-      markerControls1 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        markerRoot,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
+      
+      scene.add(markerRoot1);
 
       let geometry1 = new THREE.CylinderGeometry(1, 1, 4, 32, 1);
       let loader = new THREE.TextureLoader();
@@ -171,7 +344,7 @@ function initialize() {
       });
       mesh1 = new THREE.Mesh(geometry1, material1);
       mesh1.position.y = -2;
-      markerRoot.add(mesh1);
+      markerRoot1.add(mesh1);
 
       // the invisibility cloak (ring; has circular hole)
       let geometry0 = new THREE.RingGeometry(1, 9, 32);
@@ -179,25 +352,18 @@ function initialize() {
         // map: loader.load( 'images/color-grid.png' ), // for testing placement
         colorWrite: false,
       });
-      let mesh0 = new THREE.Mesh(geometry0, material0);
+      mesh0 = new THREE.Mesh(geometry0, material0);
       mesh0.rotation.x = -Math.PI / 2;
-      markerRoot.add(mesh0);
+      markerRoot1.add(mesh0);
 
       break;
     }
 
     case 2: {
-      ammoMarker = new THREE.Group();
-      scene.add(ammoMarker);
-      markerControls5 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        ammoMarker,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
-      ammoMarker.add(markerGroup);
+      
+      scene.add(markerRoot2);
+      
+      
 
       let geometry2 = new THREE.CubeGeometry(2, 2, 2);
       var texture2 = new THREE.TextureLoader().load("/img/ammo.png");
@@ -209,26 +375,17 @@ function initialize() {
       });
 
       mesh2 = new THREE.Mesh(geometry2, material2);
-      mesh2.position.y = 0.5;
+      
 
-      ammoMarker.add(mesh2);
+      markerRoot2.add(mesh2);
 
       break;
     }
 
     case 3: {
-      hpMarker = new THREE.Group();
-      scene.add(hpMarker);
-
-      markerControls2 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        hpMarker,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
-      hpMarker.add(markerGroup);
+     
+      scene.add(markerRoot3);
+      
 
       let geometry3 = new THREE.CubeGeometry(2, 2, 2);
       var texture3 = new THREE.TextureLoader().load("/img/healing.png");
@@ -240,26 +397,16 @@ function initialize() {
       });
 
       mesh3 = new THREE.Mesh(geometry3, material3);
-      mesh3.position.y = 0.5;
+      
 
-      hpMarker.add(mesh3);
+      markerRoot3.add(mesh3);
 
       break;
     }
 
     case 4: {
-      respawnMarker = new THREE.Group();
-      scene.add(respawnMarker);
-      markerControls4 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        respawnMarker,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
-
-      respawnMarker.add(markerGroup);
+      
+      scene.add(markerRoot4);
       let geometry4 = new THREE.CubeGeometry(1, 1, 1);
       var texture4 = new THREE.TextureLoader().load("/img/respawn.jpg");
       let material4 = new THREE.MeshBasicMaterial({
@@ -272,24 +419,14 @@ function initialize() {
       mesh4 = new THREE.Mesh(geometry4, material4);
       mesh4.position.y = 0.5;
 
-      respawnMarker.add(mesh4);
+      markerRoot4.add(mesh4);
       break;
     }
 
     case 5: {
-      markerRoot5 = new THREE.Group();
+      
       scene.add(markerRoot5);
-      markerControls5 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        markerRoot5,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
-
-      markerRoot5.add(markerGroup);
-
+    
       mesh5 = new THREE.Mesh(geometry5, material5);
       mesh5.rotation.x = -Math.PI / 2;
 
@@ -299,17 +436,9 @@ function initialize() {
     }
 
     case 6: {
-      markerRoot6 = new THREE.Group();
+      
       scene.add(markerRoot6);
 
-      markerControls6 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        markerRoot6,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
       let geometry6 = new THREE.SphereGeometry(1, 32, 32);
 
       let loader6 = new THREE.TextureLoader();
@@ -324,7 +453,7 @@ function initialize() {
 
       markerRoot6.add(mesh6);
 
-      let pointLight6 = new THREE.PointLight(0xffffff, 1, 100);
+      pointLight6 = new THREE.PointLight(0xffffff, 1, 100);
       pointLight6.position.set(0.5, 3, 2);
       // create a mesh to help visualize the position of the light
       pointLight6.add(
@@ -338,23 +467,15 @@ function initialize() {
       break;
     }
     case 7: {
-      markerRoot7 = new THREE.Group();
+      
       scene.add(markerRoot7);
 
-      markerControls7 = new THREEx.ArMarkerControls(
-        arToolkitContext,
-        markerRoot7,
-        {
-          type: 'barcode',
-          barcodeValue: 5,
-        }
-      );
       let loader = new THREE.TextureLoader();
 
       let videoTexture = new THREE.VideoTexture(arToolkitSource.domElement);
       videoTexture.minFilter = THREE.LinearFilter;
 
-      let refractMaterial = new THREE.ShaderMaterial({
+       refractMaterial = new THREE.ShaderMaterial({
         uniforms: {
           texture: { value: videoTexture },
           refractionRatio: { value: 0.75 },
@@ -379,17 +500,8 @@ function initialize() {
     }
     case 8:
       {
-        markerRoot8 = new THREE.Group();
+        
         scene.add(markerRoot8);
-
-        markerControls8 = new THREEx.ArMarkerControls(
-          arToolkitContext,
-          markerRoot8,
-          {
-            type: 'barcode',
-            barcodeValue: 5,
-          }
-        );
 
         // water
 
@@ -429,9 +541,9 @@ function initialize() {
         break;
       }
 
-      markerRoot2.add(mesh5);
+      
 
-      break;
+      
   }
 }
 
@@ -441,12 +553,17 @@ function update() {
   if (arToolkitSource.ready !== false)
     arToolkitContext.update(arToolkitSource.domElement);
 
-  material5.uniforms.time.value += deltaTime;
-  material8.uniforms.time.value += deltaTime;
+  if(markerRoot5.visible){
+    material5.uniforms.time.value += deltaTime;
+  }
+  if(markerRoot8.visible){
+    material8.uniforms.time.value += deltaTime;
+  }
+  
 }
 
 function render() {
-  mesh6.rotation.y += 0.1;
+  //mesh6.rotation.y += 0.1;
   renderer.render(scene, camera);
 }
 
