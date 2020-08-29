@@ -13,8 +13,7 @@ var markerRoot5 = new THREE.Group();
 var markerRoot6 = new THREE.Group();
 var markerRoot7 = new THREE.Group();
 var markerRoot8 = new THREE.Group();
-var markerRoot9 = new THREE.Group();
-var markerRoot10 = new THREE.Group();
+
 
 var markerControls1;
 var markerControls2;
@@ -24,8 +23,7 @@ var markerControls5;
 var markerControls6;
 var markerControls7;
 var markerControls8;
-var markerControls9;
-var markerControls10;
+
 
 var markerGroup;
 
@@ -45,7 +43,6 @@ var material5 = new THREE.ShaderMaterial({
 
 var loader8 = new THREE.TextureLoader();
 var texture8 = loader8.load("img/water-2.jpg");
-// let texture = loader.load( 'images/color-grid.png' );
 texture8.wrapS = THREE.RepeatWrapping;
 texture8.wrapT = THREE.RepeatWrapping;
 texture8.repeat.set(8, 2);
@@ -71,8 +68,7 @@ var mesh6;
 var pointLight6;
 var mesh7;
 var mesh8, mesh81, mesh83;
-var mesh9;
-var mesh10;
+
 
 var choice = 5;
 
@@ -138,16 +134,6 @@ function changeModel(x) {
     renderer.dispose(mesh83);
     scene.remove(markerRoot8);
   }
-  if (markerRoot == "markerRoot9") {
-    markerRoot9.remove(mesh9);
-    renderer.dispose(mesh9);
-    scene.remove(markerRoot9);
-  }
-  if (markerRoot == "markerRoot10") {
-    markerRoot10.remove(mesh10);
-    renderer.dispose(mesh10);
-    scene.remove(markerRoot10);
-  }
 
   choice = x;
   console.log("Zmiana choica");
@@ -162,16 +148,17 @@ function initialize() {
   camera.fov = window.innerHeight / window.screen.height;
   camera.aspect = window.innerWidth / window.innerHeight;
   scene.add(camera);
-  camera.position.z = 5;
+  camera.position.z = 3;
 
   renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,
     canvas: myCanvas,
   });
-
+  renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
+ 
+  //renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
   /*renderer.domElement.style.position = "absolute";
   renderer.domElement.style.top = "0px";
   renderer.domElement.style.left = "0px";*/
@@ -232,20 +219,6 @@ function initialize() {
     barcodeValue: 5,
   });
 
-  markerControls9 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot9, {
-    type: "barcode",
-    barcodeValue: 5,
-  });
-
-  markerControls10 = new THREEx.ArMarkerControls(
-    arToolkitContext,
-    markerRoot10,
-    {
-      type: "barcode",
-      barcodeValue: 5,
-    }
-  );
-
   //naprawia bĹÄd z renderowaniem strony, gdy zmienimy rozmiar okienka
   function onResize() {
     arToolkitSource.onResize();
@@ -292,11 +265,8 @@ function initialize() {
       mesh1 = new THREE.Mesh(geometry1, material1);
       mesh1.position.y = -2;
       markerRoot1.add(mesh1);
-
-      // the invisibility cloak (ring; has circular hole)
       let geometry0 = new THREE.RingGeometry(1, 9, 32);
       let material0 = new THREE.MeshBasicMaterial({
-        // map: loader.load( 'images/color-grid.png' ), // for testing placement
         colorWrite: false,
       });
       mesh0 = new THREE.Mesh(geometry0, material0);
@@ -392,7 +362,6 @@ function initialize() {
 
       pointLight6 = new THREE.PointLight(0xffffff, 1, 100);
       pointLight6.position.set(0.5, 3, 2);
-      // create a mesh to help visualize the position of the light
       pointLight6.add(
         new THREE.Mesh(
           new THREE.SphereBufferGeometry(0.05, 16, 8),
@@ -462,10 +431,9 @@ function initialize() {
       mesh81.position.y = -2;
       markerRoot8.add(mesh81);
 
-      // the invisibility cloak (ring; has circular hole)
       let geometry83 = new THREE.RingGeometry(1, 9, 32);
       let material83 = new THREE.MeshBasicMaterial({
-        // map: loader.load( 'images/color-grid.png' ), // for testing placement
+       
         colorWrite: false,
       });
       let mesh83 = new THREE.Mesh(geometry83, material83);
@@ -492,7 +460,7 @@ function update() {
 }
 
 function render() {
-  //mesh6.rotation.y += 0.1;
+  renderer.setPixelRatio( window.devicePixelRatio );
   renderer.render(scene, camera);
 }
 
