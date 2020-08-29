@@ -46,15 +46,18 @@
     transform: translateY(-20px) rotate(-45deg);
   }
   .navigation {
-    height: fit-content;
+    height: 100%;
     width: 240px;
     background-color: #fff;
     position: absolute;
     top: 0;
     left: 0;
     transform: translateX(-240px);
+    overflow-y: scroll;
   }
-
+  .navigation::-webkit-scrollbar {
+    display: none;
+  }
   .navigation__item {
     background-color: rgba(220, 0, 0, 1);
     border: 0;
@@ -124,15 +127,18 @@
     transform: translateY(-100px) rotate(-45deg);
   }
   .navigation {
-    height: fit-content;
+    height: 100%;
     width: 800px;
     background-color: #fff;
     position: absolute;
     top: 0;
     left: 0;
     transform: translateX(-800px);
+    overflow-y: scroll;
   }
-
+  .navigation::-webkit-scrollbar {
+    display: none;
+  }
   .navigation__item {
     background-color: rgba(220, 0, 0, 1);
     border: 0;
