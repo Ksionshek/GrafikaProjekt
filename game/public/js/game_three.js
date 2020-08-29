@@ -132,7 +132,8 @@ function initialize() {
   // create atToolkitContext
   arToolkitContext = new THREEx.ArToolkitContext({
     cameraParametersUrl: "/data/camera_para.dat",
-    detectionMode: "mono",
+    detectionMode: "mono_and_matrix",
+    matrixCodeType: "3x3",
     maxDetectionRate: 30,
   });
 
@@ -152,8 +153,8 @@ function initialize() {
         arToolkitContext,
         markerRoot,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
 
@@ -192,8 +193,8 @@ function initialize() {
         arToolkitContext,
         ammoMarker,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
       ammoMarker.add(markerGroup);
@@ -223,8 +224,8 @@ function initialize() {
         arToolkitContext,
         hpMarker,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
       hpMarker.add(markerGroup);
@@ -253,8 +254,8 @@ function initialize() {
         arToolkitContext,
         respawnMarker,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
 
@@ -282,8 +283,8 @@ function initialize() {
         arToolkitContext,
         markerRoot5,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
 
@@ -305,8 +306,8 @@ function initialize() {
         arToolkitContext,
         markerRoot6,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
       let geometry6 = new THREE.SphereGeometry(1, 32, 32);
@@ -344,8 +345,8 @@ function initialize() {
         arToolkitContext,
         markerRoot7,
         {
-          type: "pattern",
-          patternUrl: "/data/hiro.patt",
+          type: 'barcode',
+          barcodeValue: 5,
         }
       );
       let loader = new THREE.TextureLoader();
@@ -385,8 +386,8 @@ function initialize() {
           arToolkitContext,
           markerRoot8,
           {
-            type: "pattern",
-            patternUrl: "/data/hiro.patt",
+            type: 'barcode',
+            barcodeValue: 5,
           }
         );
 
