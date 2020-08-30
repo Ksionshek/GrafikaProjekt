@@ -14,7 +14,6 @@ var markerRoot6 = new THREE.Group();
 var markerRoot7 = new THREE.Group();
 var markerRoot8 = new THREE.Group();
 
-
 var markerControls1;
 var markerControls2;
 var markerControls3;
@@ -23,7 +22,6 @@ var markerControls5;
 var markerControls6;
 var markerControls7;
 var markerControls8;
-
 
 var markerGroup;
 
@@ -47,7 +45,6 @@ texture8.wrapS = THREE.RepeatWrapping;
 texture8.wrapT = THREE.RepeatWrapping;
 texture8.repeat.set(8, 2);
 
-// shader-based material
 var material8 = new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 1.0 },
@@ -69,7 +66,6 @@ var pointLight6;
 var mesh7;
 var mesh8, mesh81, mesh83;
 
-
 var choice = 5;
 
 initialize();
@@ -79,11 +75,11 @@ function changeModel(x) {
   if (clickscount == 12) {
     location.reload();
   }
-  console.log("choice poprzedni: ");
-  console.log(choice);
+  // console.log("choice poprzedni: ");
+  // console.log(choice);
   let markerRoot = "markerRoot" + choice;
-  console.log("markerRoot");
-  console.log(markerRoot);
+  // console.log("markerRoot");
+  // console.log(markerRoot);
   if (markerRoot == "markerRoot1") {
     markerRoot1.remove(mesh1);
     markerRoot1.add(mesh0);
@@ -136,8 +132,8 @@ function changeModel(x) {
   }
 
   choice = x;
-  console.log("Zmiana choica");
-  console.log(choice);
+  // console.log("Zmiana choica");
+  // console.log(choice);
   clickscount++;
   initialize();
 }
@@ -155,14 +151,11 @@ function initialize() {
     alpha: true,
     canvas: myCanvas,
   });
-  
+
   renderer.setSize(window.innerWidth, window.innerHeight);
- 
+
   renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
-  renderer.setPixelRatio( window.devicePixelRatio );
-  //renderer.domElement.style.position = "absolute";
- /* renderer.domElement.style.top = "0px";
-  renderer.domElement.style.left = "0px";*/
+  renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
 
   clock = new THREE.Clock();
@@ -178,63 +171,51 @@ function initialize() {
     cameraParametersUrl: "/data/camera_para.dat",
     detectionMode: "mono_and_matrix",
     matrixCodeType: "3x3",
-    
   });
 
   markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
     type: "barcode",
     barcodeValue: 5,
- 
   });
 
   markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
     type: "barcode",
     barcodeValue: 5,
-   
   });
 
   markerControls3 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot3, {
     type: "barcode",
     barcodeValue: 5,
-
   });
 
   markerControls4 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot4, {
     type: "barcode",
     barcodeValue: 5,
- 
   });
 
   markerControls5 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot5, {
     type: "barcode",
     barcodeValue: 5,
- 
   });
 
   markerControls6 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot6, {
     type: "barcode",
     barcodeValue: 5,
-   
   });
 
   markerControls7 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot7, {
     type: "barcode",
     barcodeValue: 5,
-    
   });
 
   markerControls8 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot8, {
     type: "barcode",
     barcodeValue: 5,
-    
   });
 
-  //naprawia bĹÄd z renderowaniem strony, gdy zmienimy rozmiar okienka
   function onResize() {
     arToolkitSource.onResize();
     arToolkitSource.copySizeTo(renderer.domElement);
-   // renderer.setSize(window.innerWidth, window.innerHeight);
-    //renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
 
     if (arToolkitContext.arController !== null) {
       arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
@@ -245,18 +226,16 @@ function initialize() {
     onResize();
   });
 
-  // handle resize event
   window.addEventListener("resize", function () {
     onResize();
   });
 
-  // copy projection matrix to camera when initialization complete
   arToolkitContext.init(function onCompleted() {
     camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
   });
 
-  console.log("Switch: ");
-  console.log(choice);
+  // console.log("Switch: ");
+  // console.log(choice);
   switch (choice) {
     case 1: {
       scene.add(markerRoot1);
@@ -383,7 +362,6 @@ function initialize() {
     case 7: {
       scene.add(markerRoot7);
 
-
       let videoTexture = new THREE.VideoTexture(arToolkitSource.domElement);
       videoTexture.minFilter = THREE.LinearFilter;
 
@@ -401,7 +379,7 @@ function initialize() {
       });
 
       reflectMesh = new THREE.Mesh(
-        new THREE.TorusKnotGeometry(1, 0.4, 128, 16), // new THREE.SphereBufferGeometry(1, 32, 32),
+        new THREE.TorusKnotGeometry(1, 0.4, 128, 16),
         refractMaterial
       );
 
@@ -413,9 +391,7 @@ function initialize() {
     case 8: {
       scene.add(markerRoot8);
 
-      // water
-
-      let geometry8 = new THREE.TorusGeometry(1, 1, 64, 256); // radius, tube radius
+      let geometry8 = new THREE.TorusGeometry(1, 1, 64, 256);
 
       mesh8 = new THREE.Mesh(geometry8, material8);
       mesh8.rotation.x = -Math.PI / 2;
@@ -423,7 +399,6 @@ function initialize() {
 
       markerRoot8.add(mesh8);
 
-      // the inside of the hole
       let geometry81 = new THREE.CylinderGeometry(1, 1, 4, 32, 1);
       let texture81 = loader8.load("img/tiles.jpg", render);
       texture81.wrapS = THREE.RepeatWrapping;
@@ -440,7 +415,6 @@ function initialize() {
 
       let geometry83 = new THREE.RingGeometry(1, 9, 32);
       let material83 = new THREE.MeshBasicMaterial({
-       
         colorWrite: false,
       });
       let mesh83 = new THREE.Mesh(geometry83, material83);
@@ -453,8 +427,6 @@ function initialize() {
 }
 
 function update() {
-  // update artoolkit on every frame
-
   if (arToolkitSource.ready !== false)
     arToolkitContext.update(arToolkitSource.domElement);
 
@@ -467,7 +439,7 @@ function update() {
 }
 
 function render() {
-  renderer.setPixelRatio( window.devicePixelRatio );
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.render(scene, camera);
 }
 
