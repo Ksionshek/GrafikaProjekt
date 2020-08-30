@@ -145,7 +145,7 @@ function changeModel(x) {
 function initialize() {
   scene = new THREE.Scene();
   camera = new THREE.Camera();
-  camera.fov = window.innerHeight / window.innerHeight;
+  camera.fov = window.innerWidth / window.innerHeight;
   camera.aspect = window.innerWidth / window.innerHeight;
   scene.add(camera);
   camera.position.z = 5;
