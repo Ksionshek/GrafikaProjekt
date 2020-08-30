@@ -145,22 +145,23 @@ function changeModel(x) {
 function initialize() {
   scene = new THREE.Scene();
   camera = new THREE.Camera();
-  camera.fov = window.innerHeight / window.screen.height;
+  camera.fov = window.innerHeight / window.innerHeight;
   camera.aspect = window.innerWidth / window.innerHeight;
   scene.add(camera);
-  camera.position.z = 3;
+  camera.position.z = 5;
 
   renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,
     canvas: myCanvas,
   });
-  renderer.setPixelRatio( window.devicePixelRatio );
+  
   renderer.setSize(window.innerWidth, window.innerHeight);
  
-  //renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
-  /*renderer.domElement.style.position = "absolute";
-  renderer.domElement.style.top = "0px";
+  renderer.setViewport(0, 0, myCanvas.width, myCanvas.height);
+  renderer.setPixelRatio( window.devicePixelRatio );
+  //renderer.domElement.style.position = "absolute";
+ /* renderer.domElement.style.top = "0px";
   renderer.domElement.style.left = "0px";*/
   document.body.appendChild(renderer.domElement);
 
@@ -170,6 +171,8 @@ function initialize() {
 
   arToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
+  
+   
   });
 
   // create atToolkitContext
@@ -177,54 +180,63 @@ function initialize() {
     cameraParametersUrl: "/data/camera_para.dat",
     detectionMode: "mono_and_matrix",
     matrixCodeType: "3x3",
+    
   });
 
   markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
     type: "barcode",
     barcodeValue: 5,
+ 
   });
 
   markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
     type: "barcode",
     barcodeValue: 5,
+   
   });
 
   markerControls3 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot3, {
     type: "barcode",
     barcodeValue: 5,
+
   });
 
   markerControls4 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot4, {
     type: "barcode",
     barcodeValue: 5,
+ 
   });
 
   markerControls5 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot5, {
     type: "barcode",
     barcodeValue: 5,
+ 
   });
 
   markerControls6 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot6, {
     type: "barcode",
     barcodeValue: 5,
+   
   });
 
   markerControls7 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot7, {
     type: "barcode",
     barcodeValue: 5,
+    
   });
 
   markerControls8 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot8, {
     type: "barcode",
     barcodeValue: 5,
+    
   });
 
   //naprawia bĹÄd z renderowaniem strony, gdy zmienimy rozmiar okienka
   function onResize() {
     arToolkitSource.onResize();
     arToolkitSource.copySizeTo(renderer.domElement);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+   // renderer.setSize(window.innerWidth, window.innerHeight);
+    //renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
 
     if (arToolkitContext.arController !== null) {
       arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
@@ -289,7 +301,6 @@ function initialize() {
       });
 
       mesh2 = new THREE.Mesh(geometry2, material2);
-
       markerRoot2.add(mesh2);
 
       break;
@@ -308,7 +319,6 @@ function initialize() {
       });
 
       mesh3 = new THREE.Mesh(geometry3, material3);
-
       markerRoot3.add(mesh3);
 
       break;
@@ -326,7 +336,7 @@ function initialize() {
       });
 
       mesh4 = new THREE.Mesh(geometry4, material4);
-      mesh4.position.y = 0.5;
+      mesh4.position.y = 0.0;
 
       markerRoot4.add(mesh4);
       break;
@@ -356,7 +366,7 @@ function initialize() {
       });
 
       mesh6 = new THREE.Mesh(geometry6, material6);
-      mesh6.position.y = 1;
+      mesh6.position.y = 0;
 
       markerRoot6.add(mesh6);
 
@@ -375,7 +385,6 @@ function initialize() {
     case 7: {
       scene.add(markerRoot7);
 
-      let loader = new THREE.TextureLoader();
 
       let videoTexture = new THREE.VideoTexture(arToolkitSource.domElement);
       videoTexture.minFilter = THREE.LinearFilter;
@@ -398,7 +407,7 @@ function initialize() {
         refractMaterial
       );
 
-      reflectMesh.position.y = 1;
+      reflectMesh.position.y = 0;
 
       markerRoot7.add(reflectMesh);
       break;
