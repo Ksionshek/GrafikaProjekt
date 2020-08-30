@@ -171,8 +171,6 @@ function initialize() {
 
   arToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
-  
-   
   });
 
   // create atToolkitContext
