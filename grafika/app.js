@@ -21,7 +21,11 @@ const webServer = https.createServer(
   app
 );
 
-webServer.listen(httpsSeverPort);
+webServer.listen(httpsSeverPort, () => {
+  console.log(
+    `GrafikaProjekt app listening at https://localhost:${httpsSeverPort}`
+  );
+});
 
 // Set header to no-cache
 function setHeaders(res) {
