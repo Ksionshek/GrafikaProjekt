@@ -1,0 +1,9 @@
+{
+  "name": "GrafikaProjekt",
+  "version": "1.0.0",
+  "description": "Projekt z Grafiki Komputerowej",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
